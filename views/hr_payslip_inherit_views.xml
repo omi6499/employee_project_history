@@ -1,0 +1,90 @@
+<odoo>
+    <record id="view_hr_payslip_inherit_tree" model="ir.ui.view">
+        <field name="name">hr.payslip.tree.inherit</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="hr_payroll.view_hr_payslip_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree/field[@name='basic_wage']" position="before">
+                <field name="entries" widget="badge" decoration-danger="entries == 'not_completed'" decoration-success="entries == 'completed'"/>
+            </xpath>
+            <xpath expr="//tree" position="attributes">
+                <attribute name="default_order">id desc</attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+    <record id="view_hr_payslip_inherit_form" model="ir.ui.view">
+        <field name="name">hr.payslip.form.inherit</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='payslip_run_id']" position="before">
+                <field name="entries" widget="badge" decoration-danger="entries == 'not_completed'" decoration-success="entries == 'completed'" readonly="state not in ['draft', 'verify']"/>
+                <field name="remaining_entries" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='struct_id']" position="after">
+                <field name="payment_type" readonly="state not in ['draft', 'verify']"/>
+                <field name="note"/>
+                <field name="employee_payment" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Payslip Inherit search view for employee payment mode  -->
+    <record id="View_hr_payslip_search_inherit_form" model="ir.ui.view">
+        <field name="name">hr.payslip.search.view.inherit</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="hr_payroll.view_hr_payslip_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='employee_id']" position="after">
+                <field name="employee_payment"/>
+            </xpath>
+            <xpath expr="//filter[@name='group_by_employee_id']" position="after">
+                <filter string="Employee Payment" name="group_by_employee_payment_mode" context="{'group_by': 'employee_payment'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Inherit action for payslip add default employee payment mode -->
+    <record id="hr_payroll.hr_payslip_action_view_to_pay" model="ir.actions.act_window">
+        <field name="search_view_id" ref="View_hr_payslip_search_inherit_form"/>
+        <field name="context">{'search_default_group_by_employee_payment_mode': 1}</field>
+    </record>
+
+    <!-- Add report field from batch -->
+    <record id="View_hr_payslip_run_form_inherit_form" model="ir.ui.view">
+        <field name="name">hr.payslip.run.form.inherit</field>
+        <field name="model">hr.payslip.run</field>
+        <field name="inherit_id" ref="hr_payroll.hr_payslip_run_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='company_id']" position="before">
+                <field name="file_name" invisible="1" force_save="1"/>
+                <field name="excel_report" groups="base.group_system" filename="file_name"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="View_hr_payslip_run_tree_inherit_form" model="ir.ui.view">
+        <field name="name">hr.payslip.run.tree.inherit</field>
+        <field name="model">hr.payslip.run</field>
+        <field name="inherit_id" ref="hr_payroll.hr_payslip_run_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="attributes">
+                <attribute name="default_order">id desc</attribute>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="view_account_move_inherit_form" model="ir.ui.view">
+        <field name="name">account.move.line.employee.form.inherit</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="bi_hr_employee_loan.account_move_inherit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='employee_id']" position="before">
+                <field name="employee_number"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="employee_project_update_wizard_view" model="ir.ui.view">
+        <field name="name">employee.project.update.wizard.view</field>
+        <field name="model">update.employee.project</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="employee_id" readonly="1"/>
+                    <field name="old_project_id" string="Current Project" readonly="1"/>
+                    <field name="project_id" string="New Project"/>
+                    <field name="change_designation_id" string="Employee Designation"/>
+                    <field name="change_reason_id" string="Reason"/>
+                </group>
+                <footer>
+                    <button name="update_employee_project" string="Update Project" type="object" class="btn-primary"/>
+                    <button string="Close" class="btn-secondary" special="cancel" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

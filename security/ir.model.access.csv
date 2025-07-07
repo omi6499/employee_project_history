@@ -1,0 +1,16 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_employee_project,access.employee.project,model_employee_project,base.group_user,1,1,1,1
+access_employee_project_history,access.employee.project.history,model_employee_project_history,base.group_user,1,1,1,1
+access_employee_project_type,access.employee.project.type,model_employee_project_type,base.group_user,1,1,1,1
+access_employee_project_region,access.employee.project.region,model_employee_project_region,base.group_user,1,1,1,1
+employee_project_history.access_project_history_designation,access_project_history_designation,employee_project_history.model_project_history_designation,base.group_user,1,1,1,1
+employee_project_history.access_project_history_reason,access_project_history_reason,employee_project_history.model_project_history_reason,base.group_user,1,1,1,1
+employee_project_history.access_update_employee_project,access_update_employee_project,employee_project_history.model_update_employee_project,base.group_user,1,1,1,1
+access_employee_timesheet,access.employee.timesheet,model_employee_timesheet,base.group_user,1,1,1,1
+access_employee_timesheet_line,access.employee.timesheet.line,model_employee_timesheet_line,base.group_user,1,1,1,1
+access_hr_payslip_draft_wizard,access.hr.payslip.draft.wizard,model_hr_payslip_draft_wizard,base.group_user,1,1,1,1
+access_company_analytic_account,access.company.analytic.account,model_company_analytic_account,base.group_user,1,1,1,1
+access_vaction_history,access.vaction.history,model_vaction_history,base.group_user,1,1,1,1
+access_employee_category_report_wizard,access.employee.category.report.wizard,model_employee_category_report_wizard,base.group_user,1,1,1,1
+access_employee_category,access.employee.category,model_employee_category,base.group_user,1,0,0,0
+access_employee_category_admin,access.employee.category.admin,model_employee_category,base.group_system,1,1,1,1

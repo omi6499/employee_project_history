@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="employee_project_form_view" model="ir.ui.view">
+            <field name="name">employee_project.form</field>
+            <field name="model">employee.project</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" />
+                                <field name="project_region_id" />
+                                <field name="project_controler_id" />
+                                <field name="operation_manager_id" />
+                                <field name="division_head_id" />
+                                <field name="client_id" />
+                                <field name="is_rotational_off" widget="boolean_toggle"/>
+                                <field name="day_selection"/>
+                            </group>
+                            <group>
+                                <field name="mrm_id" />
+                                <field name="hr_id" />
+                                <field name="auditor_id" />
+                                <field name="finance_id" />
+                                <field name="coo_id" />
+                                <field name="description"/>
+                            </group>
+                        </group>
+                        <field name="company_analytic_account_ids">
+                            <tree>
+                                <field name="company_id"/>
+                                <field name="analytic_precision" column_invisible="1"/>
+                                <field name="analytic_distribution" widget="analytic_distribution"/>
+                            </tree>
+                            <form string="Company Analytic Account">
+                                <sheet>
+                                    <group>
+                                        <field name="company_id"/>
+                                        <field name="analytic_precision" invisible="1"/>
+                                        <field name="analytic_distribution" widget="analytic_distribution" context="{'company_id': company_id}"/>
+                                    </group>
+                                </sheet>
+                            </form>
+                        </field>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="employee_project_tree_view" model="ir.ui.view">
+            <field name="name">employee_project.tree</field>
+            <field name="model">employee.project</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="project_region_id"/>
+                    <field name="description"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="employee_project_region_tree_view" model="ir.ui.view">
+            <field name="name">employee_project.region.tree</field>
+            <field name="model">employee.project.region</field>
+            <field name="arch" type="xml">
+                <tree editable="top">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="employee_project_designation_tree_view" model="ir.ui.view">
+            <field name="name">employee_project.designation.tree</field>
+            <field name="model">project.history.designation</field>
+            <field name="arch" type="xml">
+                <tree editable="top">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="employee_project_change_reasons_tree_view" model="ir.ui.view">
+            <field name="name">employee_project.change.reasons.tree</field>
+            <field name="model">project.history.reason</field>
+            <field name="arch" type="xml">
+                <tree editable="top">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="employee_category_tree_view" model="ir.ui.view">
+            <field name="name">employee.category.tree</field>
+            <field name="model">employee.category</field>
+            <field name="arch" type="xml">
+                <tree editable="top">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="employee_project_act_window" model="ir.actions.act_window">
+            <field name="name">Employee Projects</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">employee.project</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record id="employee_project_region_act_window" model="ir.actions.act_window">
+            <field name="name">Employee Projects Regions</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">employee.project.region</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+        <record id="employee_project_designation_act_window" model="ir.actions.act_window">
+            <field name="name">Employee Designations</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">project.history.designation</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+        <record id="employee_project_change_reason_act_window" model="ir.actions.act_window">
+            <field name="name">Projects change reasons</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">project.history.reason</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+        <record id="employee_category_act_window" model="ir.actions.act_window">
+            <field name="name">Employee Category</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">employee.category</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+        <menuitem name="Employee Projects" id="employee_project_menu"
+                  parent="hr.menu_human_resources_configuration"
+                  sequence="10"/>
+
+        <menuitem name="Projects" id="emp_project_project_menu"
+                  parent="employee_project_menu"
+                  action="employee_project_act_window"/>
+
+        <menuitem name="Projects Regions" id="employee_project_regions_menu"
+                  parent="employee_project_menu"
+                  action="employee_project_region_act_window"/>
+
+        <menuitem name="Employee Designations" id="employee_project_designation_menu"
+                  parent="employee_project_menu"
+                  action="employee_project_designation_act_window"/>
+
+        <menuitem name="Change Project Reasons" id="employee_project_change_reasons_menu"
+                  parent="employee_project_menu"
+                  action="employee_project_change_reason_act_window"/>
+
+        <menuitem name="Employee Category" id="employee_category_menu"
+                  parent="employee_project_menu"
+                  action="employee_category_act_window"
+                  groups="base.group_system"/>
+
+    </data>
+</odoo>

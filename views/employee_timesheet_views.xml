@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="employee_timesheet_view_form" model="ir.ui.view">
+        <field name="name">employee.timesheet.view.form</field>
+        <field name="model">employee.timesheet</field>
+        <field name="arch" type="xml">
+            <form string="Timesheet form">
+                <header>
+                    <button name="action_reset" string="Refuse" type="object"
+                        class="btn-primary" invisible="state in ['draft','approved']"/>
+                    <button name="action_pc" string="PC Approval" type="object"
+                        class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_client" string="Client Approval" type="object"
+                        class="btn-primary" invisible="state != 'pc'"
+                        groups="employee_project_history.group_project_history_coo" />
+                    <button name="action_om" string="OM Approval" type="object"
+                        class="btn-primary" invisible="state != 'client'"
+                        groups="employee_project_history.group_project_history_pc" />
+                    <button name="action_dh" string="DH Approval" type="object"
+                        class="btn-primary" invisible="state != 'om'"
+                        groups="employee_project_history.group_project_history_om" />
+                    <button name="action_mrm" string="MRM Approval" type="object"
+                        class="btn-primary" invisible="state != 'dh'"
+                        groups="employee_project_history.group_project_history_dh" />
+                    <button name="action_hr" string="HR Approval" type="object"
+                        class="btn-primary" invisible="state != 'mrm'"
+                        groups="employee_project_history.group_project_history_mrm" />
+                    <button name="action_auditor" string="Auditor Approval" type="object"
+                        class="btn-primary" invisible="state != 'hr'"
+                        groups="employee_project_history.group_project_history_hr" />
+                    <button name="action_finance" string="Finance Approval" type="object"
+                        class="btn-primary" invisible="state != 'auditor'"
+                        groups="employee_project_history.group_project_history_auditor" />
+                    <button name="action_coo" string="COO Approval" type="object"
+                        class="btn-primary" invisible="state != 'finance'"
+                        groups="employee_project_history.group_project_history_finance" />
+                    <!-- <button name="action_client" string="Client Approval" type="object"
+                        class="btn-primary" invisible="state != 'coo'"
+                        groups="employee_project_history.group_project_history_coo" /> -->
+                    <button name="action_approved" string="Approve" type="object"
+                        class="btn-primary" invisible="state != 'coo'"
+                        groups="employee_project_history.group_project_history_client,employee_project_history.group_project_history_coo" />
+                    <button name="action_generate_payslip" string="Generate Payslip" type="object"
+                        class="btn-primary" invisible="state != 'approved' or payslip_created" />
+                    <field name="state" widget="statusbar" />
+                </header>
+                <div name="button_box" position="inside">
+                    <button class="oe_stat_button" type="object" icon="oi-view-pivot"
+                            name="action_get_payslip_record">
+                        <field string="Payslips" name="payslip_count" widget="statinfo"/>
+                    </button>
+                </div>
+                <h1>
+                    <field name="name" />
+                </h1>
+                <group>
+                    <group>
+                        <field name="project_id" readonly="state in ('coo', 'approved')"/>
+                        <field name="start_date" readonly="state in ('coo', 'approved')" />
+                        <field name="start_day" invisible="1"/>
+                        <field name="total_days" invisible="1"/>
+                    </group>
+                    <group>
+                        <field name="project_region_id" />
+                        <field name="end_date" readonly="state in ('coo', 'approved')" />
+                        <field name="end_day" invisible="1" />
+                        <field name="payslip_created" invisible="1" />
+                        <field name="is_rotational_off" invisible="1"/>
+                        <field name="comments" readonly="state in ('coo', 'approved')" />
+                    </group>
+                </group>
+                <field name="timesheet_lines_ids" readonly="state in ('coo', 'approved')">
+                    <tree string="Timeline Details" editable="bottom" create="0">
+                        <field name="emp_history_id" column_invisible="1" />
+                        <field name="employee_id" />
+                        <field name="project_id" column_invisible="1"/>
+                        <field name="is_rotational_off" column_invisible="1"/>
+                        <field name="employee_num" optional="show"/>
+                        <field name="designation" optional="show"/>
+                        <field name="start_day" column_invisible="1"/>
+                        <field name="end_day" column_invisible="1"/>
+                        <field name="day_1" column_invisible="parent.start_day &gt; 1" readonly="start_day &gt; 1"/>
+                        <field name="day_2" column_invisible="parent.start_day &gt; 2 or parent.end_day &lt; 2" readonly="start_day &gt; 2 or end_day &lt; 2" />
+                        <field name="day_3" column_invisible="parent.start_day &gt; 3 or parent.end_day &lt; 3" readonly="start_day &gt; 3 or end_day &lt; 3" />
+                        <field name="day_4" column_invisible="parent.start_day &gt; 4 or parent.end_day &lt; 4" readonly="start_day &gt; 4 or end_day &lt; 4" />
+                        <field name="day_5" column_invisible="parent.start_day &gt; 5 or parent.end_day &lt; 5" readonly="start_day &gt; 5 or end_day &lt; 5" />
+                        <field name="day_6" column_invisible="parent.start_day &gt; 6 or parent.end_day &lt; 6" readonly="start_day &gt; 6 or end_day &lt; 6" />
+                        <field name="day_7" column_invisible="parent.start_day &gt; 7 or parent.end_day &lt; 7" readonly="start_day &gt; 7 or end_day &lt; 7" />
+                        <field name="day_8" column_invisible="parent.start_day &gt; 8 or parent.end_day &lt; 8" readonly="start_day &gt; 8 or end_day &lt; 8" />
+                        <field name="day_9" column_invisible="parent.start_day &gt; 9 or parent.end_day &lt; 9" readonly="start_day &gt; 9 or end_day &lt; 9" />
+                        <field name="day_10" column_invisible="parent.start_day &gt; 10 or parent.end_day &lt; 10" readonly="start_day &gt; 10 or end_day &lt; 10" />
+                        <field name="day_11" column_invisible="parent.start_day &gt; 11 or parent.end_day &lt; 11" readonly="start_day &gt; 11 or end_day &lt; 11" />
+                        <field name="day_12" column_invisible="parent.start_day &gt; 12 or parent.end_day &lt; 12" readonly="start_day &gt; 12 or end_day &lt; 12" />
+                        <field name="day_13" column_invisible="parent.start_day &gt; 13 or parent.end_day &lt; 13" readonly="start_day &gt; 13 or end_day &lt; 13" />
+                        <field name="day_14" column_invisible="parent.start_day &gt; 14 or parent.end_day &lt; 14" readonly="start_day &gt; 14 or end_day &lt; 14" />
+                        <field name="day_15" column_invisible="parent.start_day &gt; 15 or parent.end_day &lt; 15" readonly="start_day &gt; 15 or end_day &lt; 15" />
+                        <field name="day_16" column_invisible="parent.start_day &gt; 16 or parent.end_day &lt; 16" readonly="start_day &gt; 16 or end_day &lt; 16" />
+                        <field name="day_17" column_invisible="parent.start_day &gt; 17 or parent.end_day &lt; 17" readonly="start_day &gt; 17 or end_day &lt; 17" />
+                        <field name="day_18" column_invisible="parent.start_day &gt; 18 or parent.end_day &lt; 18" readonly="start_day &gt; 18 or end_day &lt; 18" />
+                        <field name="day_19" column_invisible="parent.start_day &gt; 19 or parent.end_day &lt; 19" readonly="start_day &gt; 19 or end_day &lt; 19" />
+                        <field name="day_20" column_invisible="parent.start_day &gt; 20 or parent.end_day &lt; 20" readonly="start_day &gt; 20 or end_day &lt; 20" />
+                        <field name="day_21" column_invisible="parent.start_day &gt; 21 or parent.end_day &lt; 21" readonly="start_day &gt; 21 or end_day &lt; 21" />
+                        <field name="day_22" column_invisible="parent.start_day &gt; 22 or parent.end_day &lt; 22" readonly="start_day &gt; 22 or end_day &lt; 22" />
+                        <field name="day_23" column_invisible="parent.start_day &gt; 23 or parent.end_day &lt; 23" readonly="start_day &gt; 23 or end_day &lt; 23" />
+                        <field name="day_24" column_invisible="parent.start_day &gt; 24 or parent.end_day &lt; 24" readonly="start_day &gt; 24 or end_day &lt; 24" />
+                        <field name="day_25" column_invisible="parent.start_day &gt; 25 or parent.end_day &lt; 25" readonly="start_day &gt; 25 or end_day &lt; 25" />
+                        <field name="day_26" column_invisible="parent.start_day &gt; 26 or parent.end_day &lt; 26" readonly="start_day &gt; 26 or end_day &lt; 26" />
+                        <field name="day_27" column_invisible="parent.start_day &gt; 27 or parent.end_day &lt; 27" readonly="start_day &gt; 27 or end_day &lt; 27" />
+                        <field name="day_28" column_invisible="parent.start_day &gt; 28 or parent.end_day &lt; 28" readonly="start_day &gt; 28 or end_day &lt; 28" />
+                        <field name="day_29" column_invisible="parent.start_day &gt; 29 or parent.end_day &lt; 29" readonly="start_day &gt; 29 or end_day &lt; 29" />
+                        <field name="day_30" column_invisible="parent.start_day &gt; 30 or parent.end_day &lt; 30" readonly="start_day &gt; 30 or end_day &lt; 30" />
+                        <field name="day_31" column_invisible="parent.end_day &lt; 31" readonly="end_day &lt; 31"  />
+                        <field name="attendance_percentage" column_invisible="1"/>
+                        <field name="payslip_id" string = "Payslip" optional="hide"/>
+                        <field name="over_time" optional="show"/>
+                        <field name="trip_allowance" optional="show"/>
+                        <field name="other_deduction" optional="show"/>
+                        <field name="over_time_sar" optional="show"/>
+                        <field name="other_allowances" optional="show"/>
+                        <field name="miscellaneous" optional="show"/>
+                    </tree>
+                </field>
+            </form>
+        </field>
+    </record>
+
+    <record id="employee_timesheet_view_tree" model="ir.ui.view">
+        <field name="name">employee.timesheet.view.tree</field>
+        <field name="model">employee.timesheet</field>
+        <field name="arch" type="xml">
+            <tree string="Timesheet Details" default_order="id desc">
+                <field name="name" />
+                <field name="start_date" />
+                <field name="end_date" />
+                <field name="project_id" />
+                <field name="project_region_id" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="employee_timesheet_action" model="ir.actions.act_window">
+        <field name="name">Employee timesheet</field>
+        <field name="res_model">employee.timesheet</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    
+    <menuitem
+        id="employee_timesheet_menu"
+        name="Timesheet"
+        action="employee_timesheet_action"
+        parent="hr.menu_hr_root"
+        sequence="15"/>
+    
+</odoo>

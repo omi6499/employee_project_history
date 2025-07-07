@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Security Groups -->
+    <record model="ir.module.category" id="module_category_employee_project">
+        <field name="name">Project History</field>
+    </record>
+
+    <record id="group_project_history_pc" model="res.groups">
+        <field name="name">Project Controller</field>
+        <field name="category_id" ref="module_category_employee_project" />
+    </record>
+
+    <record id="group_project_history_om" model="res.groups">
+        <field name="name">Opration Manager</field>
+        <field name="category_id" ref="module_category_employee_project" />
+    </record>
+
+    <record id="group_project_history_dh" model="res.groups">
+        <field name="name">Division Head</field>
+        <field name="category_id" ref="module_category_employee_project" />
+    </record>
+
+    <record id="group_project_history_mrm" model="res.groups">
+        <field name="name">MRM</field>
+        <field name="category_id" ref="module_category_employee_project" />
+    </record>
+
+    <record id="group_project_history_hr" model="res.groups">
+        <field name="name">HR</field>
+        <field name="category_id" ref="module_category_employee_project" />
+    </record>
+
+    <record id="group_project_history_auditor" model="res.groups">
+        <field name="name">Auditor</field>
+        <field name="category_id" ref="module_category_employee_project" />
+    </record>
+
+    <record id="group_project_history_finance" model="res.groups">
+        <field name="name">Finance</field>
+        <field name="category_id" ref="module_category_employee_project" />
+    </record>
+
+    <record id="group_project_history_coo" model="res.groups">
+        <field name="name">COO</field>
+        <field name="category_id" ref="module_category_employee_project" />
+    </record>
+
+    <record id="group_project_history_client" model="res.groups">
+        <field name="name">Project Client</field>
+        <field name="category_id" ref="module_category_employee_project" />
+    </record>
+
+    <record id="group_project_history_editable" model="res.groups">
+        <field name="name">Edit Employee Project History</field>
+        <field name="category_id" ref="module_category_employee_project" />
+    </record>
+
+    <!-- Record rules -->
+    <!-- <record id="project_history_user_rule" model="ir.rule">
+        <field name="name">Project history User rule</field>
+        <field name="model_id" ref="model_employee_timesheet" />
+        <field name="groups" eval="[(4, ref('base.group_user'))]" />
+        <field name="domain_force">[('state', '=', 'draft')]</field>
+    </record>
+
+    <record id="project_history_user_read_rule" model="ir.rule">
+        <field name="name">Project history User Read rule</field>
+        <field name="model_id" ref="model_employee_timesheet" />
+        <field name="groups" eval="[(4, ref('base.group_user'))]" />
+        <field name="domain_force">[('state', '!=', 'draft')]</field>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="0"/>
+        <field name="perm_create" eval="0"/>
+        <field name="perm_unlink" eval="0"/>
+    </record> -->
+
+    <record id="project_history_pc_rule" model="ir.rule">
+        <field name="name">Project history Project Controller rule</field>
+        <field name="model_id" ref="model_employee_timesheet" />
+        <field name="groups" eval="[(4, ref('group_project_history_pc'))]" />
+        <field name="domain_force">[('project_id.project_controler_id', '=', user.id)]</field>
+    </record>
+
+    <record id="project_history_om_rule" model="ir.rule">
+        <field name="name">Project history Operation Manager rule</field>
+        <field name="model_id" ref="model_employee_timesheet" />
+        <field name="groups" eval="[(4, ref('group_project_history_om'))]" />
+        <field name="domain_force">[('project_id.operation_manager_id', '=', user.id)]</field>
+    </record>
+
+    <record id="project_history_dh_rule" model="ir.rule">
+        <field name="name">Project history Division Head rule</field>
+        <field name="model_id" ref="model_employee_timesheet" />
+        <field name="groups" eval="[(4, ref('group_project_history_dh'))]" />
+        <field name="domain_force">[('project_id.division_head_id', '=', user.id)]</field>
+    </record>
+
+    <record id="project_history_mrm_rule" model="ir.rule">
+        <field name="name">Project history MRM rule</field>
+        <field name="model_id" ref="model_employee_timesheet" />
+        <field name="groups" eval="[(4, ref('group_project_history_mrm'))]" />
+        <field name="domain_force">[('project_id.mrm_id', '=', user.id)]</field>
+    </record>
+
+    <record id="project_history_hr_rule" model="ir.rule">
+        <field name="name">Project history HR rule</field>
+        <field name="model_id" ref="model_employee_timesheet" />
+        <field name="groups" eval="[(4, ref('group_project_history_hr'))]" />
+        <field name="domain_force">[('project_id.hr_id', '=', user.id)]</field>
+    </record>
+
+    <record id="project_history_auditor_rule" model="ir.rule">
+        <field name="name">Project history Auditor rule</field>
+        <field name="model_id" ref="model_employee_timesheet" />
+        <field name="groups" eval="[(4, ref('group_project_history_auditor'))]" />
+        <field name="domain_force">[('project_id.auditor_id', '=', user.id)]</field>
+    </record>
+
+    <record id="project_history_finance_rule" model="ir.rule">
+        <field name="name">Project history Finance rule</field>
+        <field name="model_id" ref="model_employee_timesheet" />
+        <field name="groups" eval="[(4, ref('group_project_history_finance'))]" />
+        <field name="domain_force">[('project_id.finance_id', '=', user.id)]</field>
+    </record>
+
+    <record id="project_history_coo_rule" model="ir.rule">
+        <field name="name">Project history Coo rule</field>
+        <field name="model_id" ref="model_employee_timesheet" />
+        <field name="groups" eval="[(4, ref('group_project_history_coo'))]" />
+        <field name="domain_force">[('project_id.coo_id', '=', user.id)]</field>
+    </record>
+
+    <record id="project_history_client_rule" model="ir.rule">
+        <field name="name">Project history Client rule</field>
+        <field name="model_id" ref="model_employee_timesheet" />
+        <field name="groups" eval="[(4, ref('group_project_history_client'))]" />
+        <field name="domain_force">[('project_id.client_id', '=', user.partner_id.id)]</field>
+    </record>
+
+</odoo>

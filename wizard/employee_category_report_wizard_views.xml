@@ -1,0 +1,65 @@
+<odoo>
+    <record id="view_employee_category_report_wizard" model="ir.ui.view">
+        <field name="name">employee.category.report.wizard.form</field>
+        <field name="model">employee.category.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Employee Category Report">
+                <sheet>
+                    <field name="wizard_type" invisible="1"/>
+                    <group>
+                        <group>
+                            <field name="month" placeholder="Select Month"/>
+                            <field name="employee_region_id" invisible="wizard_type != 'region'"/>
+                            <field name="employee_project_region_ids" widget="many2many_tags" invisible="wizard_type != 'summary'"/>
+                        </group>
+                        <group>
+                            <field name="year" placeholder="Select Year"/>
+                            <field name="employee_category_ids" widget="many2many_tags"
+                                string="Categories"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="action_generate_report" type="object" string="Generate Report" class="btn btn-primary" invisible="wizard_type != 'region'"/>
+                        <button name="action_summary_report" type="object" string="Employee Summary Report" class="btn btn-primary" invisible="wizard_type != 'summary'"/>
+                        <button string="Cancel" class="btn btn-secondary" special="cancel"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="action_employee_summary_report_wizard" model="ir.actions.act_window">
+        <field name="name">Employee Summary</field>
+        <field name="res_model">employee.category.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_wizard_type': 'summary'}</field>
+    </record>
+
+    <record id="action_employee_region_report_wizard" model="ir.actions.act_window">
+        <field name="name">Employee Region Report</field>
+        <field name="res_model">employee.category.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_wizard_type': 'region'}</field>
+    </record>
+
+    <menuitem id="menu_employee_report_wizard" 
+              name="Employee Reports" 
+              parent="hr_payroll.menu_hr_payroll_payslips"
+              sequence="90"/>
+
+    <menuitem id="menu_employee_region_report_wizard" 
+              name="Employee Region" 
+              parent="menu_employee_report_wizard"
+              action="action_employee_region_report_wizard" 
+              sequence="10"/>
+    
+    <menuitem id="menu_employee_summary_report_wizard" 
+              name="Employee Summary" 
+              parent="menu_employee_report_wizard"
+              action="action_employee_summary_report_wizard" 
+              sequence="20"/>
+
+</odoo>

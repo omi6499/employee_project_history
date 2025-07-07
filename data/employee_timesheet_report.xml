@@ -1,0 +1,291 @@
+<odoo>
+
+    <template id="report_employee_timesheet">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.basic_layout">
+                    <div class="page" style="font-family: Arial, sans-serif;">
+                        <div class="row">
+                            <div class="col-4" style="border: 1px solid black;">
+                                <div style="height: 145px;">
+                                    <t t-foreach="env['res.company'].search([])" t-as="company">
+                                        <t t-if="company.id == 1 and company.logo">
+                                            <img style="max-height: 60px; min-width: 80%;"
+                                                 t-att-src="image_data_uri(company.logo)"
+                                                 class="mx-auto mt-2"
+                                                 alt="Company Logo"/>
+                                        </t>
+                                        <t t-elif="company.logo">
+                                            <img style="max-height: 50px; max-width: 50%; padding-top:5px;"
+                                                 t-att-src="image_data_uri(company.logo)"
+                                                 class="mx-2"
+                                                 alt="Company Logo"/>
+                                        </t>
+                                    </t>
+                                </div>
+                            </div>
+                            <div class="col-4" style="border: 1px solid black;">
+                                <h4
+                                    style="border-bottom: 1px solid black;  height: 75px; text-align: center; margin-top:10px;">Monthly
+                                    Attendance Timesheet</h4>
+                                <h4
+                                    style="height: 70px; text-align: center; vertical-align: middle; margin-top:10px;"><t
+                                        t-esc="doc.start_date.month or ''" />/<t
+                                        t-esc="doc.start_date.year or ''" /></h4>
+                            </div>
+                            <div class="col-4" style="border: 1px solid black;">
+                                <h3
+                                    style="border-bottom: 1px solid black; height: 75px; text-align: center; vertical-align: middle; margin-top:10px;">Project
+                                    Name :<t t-esc="doc.project_id.name or ''" /></h3>
+                                <h5 style="height: 70px; text-align: right;text-align: center; margin-top:10px;">
+                                    Location: 
+                                    <t t-if="doc.project_region_id">
+                                        <t t-esc="doc.project_region_id.name or ''" />
+                                    </t>
+                                </h5>
+                            </div>
+                        </div>
+
+                        <br />
+                        <div style="border: 1px solid black; text-align: center; padding-top:10px;">
+                            <p>LEGEND: <strong>P</strong> - Present | <strong>
+                                OT</strong> - Over Time | <strong>A</strong> - Absent | <strong>
+                                OFF</strong> - Pay Day Off | <strong>SL</strong> - Sick Leave | <strong>
+                                VL</strong> - Vacation Leave | <strong>F</strong> - Friday | <strong>
+                                S</strong> - Surplus | <strong>ROT</strong> - Rotational Off | <strong>
+                                VL-D</strong> - Unpaid Vacation
+                            </p>
+                        </div>
+                        <br />
+
+                        <table class="table table-bordered" style="padding-right:20px;">
+                            <t t-set="line" t-value="doc.timesheet_lines_ids"/>
+                            <t t-set="end_day" t-value="line.employee_timesheet_id.total_days"/>
+                            <thead style="background-color: #f0f0f0; max-width:100px;">
+                                <tr>
+                                    <th rowspan="2"
+                                        style="border: 1px solid black; text-align: center;font-size: 10px; width:5px;">
+                                        S/N</th>
+                                    <th rowspan="2"
+                                        style="border: 1px solid black; text-align: center;font-size: 10px; width:100px;">Emp
+                                        No</th>
+                                    <th rowspan="2"
+                                        style="border: 1px solid black; text-align: center;font-size: 10px; width:5px;">Employee
+                                        Name</th>
+                                    <th rowspan="2"
+                                        style="border: 1px solid black; text-align: center;font-size: 10px; width:5px;">
+                                        Designation</th>
+
+                                    <th t-att-colspan="end_day"
+                                        style="border: 1px solid black; text-align: center; background-color: #e0e0e0;font-size: 10px; width:80px;">
+                                        <t t-esc="doc.start_date.strftime('%B %Y')" />
+                                    </th>
+                                    <th rowspan="2" style="border: 1px solid black; text-align: center;font-size: 10px;">Over Time (Hr)</th>
+                                    <th rowspan="2" style="border: 1px solid black; text-align: center;font-size: 10px;">Trip Allowance (Sar)</th>
+                                    <th rowspan="2" style="border: 1px solid black; text-align: center;font-size: 10px;">Other deduction (Sar)</th>
+                                    <th rowspan="2" style="border: 1px solid black; text-align: center;font-size: 10px;">Overtime (Sar)</th>
+                                    <th rowspan="2" style="border: 1px solid black; text-align: center;font-size: 10px;">Other Allowance (Sar)</th>
+                                    <th rowspan="2" style="border: 1px solid black; text-align: center;font-size: 10px;">Misc. (Sar)</th>
+                                </tr>
+
+                                <tr>
+                                    <t t-foreach="range(1, end_day + 1)" t-as="day_number">
+                                        <th
+                                            style="border: 1px solid black; text-align:center; vertical-align:middle; font-size: 8px;">
+                                            <t t-esc="day_number"/>
+                                        </th>
+                                    </t>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Initialize Counter -->
+                                <t t-set="count" t-value="1" />
+                                <!-- Iterate Over Timesheet Lines -->
+                                <tr t-foreach="doc.timesheet_lines_ids.sorted(key=lambda l:l.employee_num)" t-as="line">
+                                    <!-- Serial Number -->
+                                    <td
+                                        style="border: 1px solid black; text-align: center;font-size: 8px;">
+                                        <t t-esc="count" />
+                                        <t t-set="count" t-value="count + 1" />
+                                    </td>
+
+                                    <!-- Employee Number -->
+                                    <td
+                                        style="border: 1px solid black; text-align: center;font-size: 12px;">
+                                        <t t-esc="line.employee_num or ''" />
+                                    </td>
+
+                                    <!-- Employee Name -->
+                                    <td
+                                        style="border: 1px solid black; text-align: center;font-size: 10px;">
+                                        <t t-esc="line.employee_id.name or ''" />
+                                    </td>
+
+                                    <!-- Designation -->
+                                    <td class="text-wrap"
+                                        style="border: 1px solid black; text-align: center;font-size: 8px;">
+                                        <t t-esc="line.designation.name or ''" />
+                                    </td>
+                                    <!-- Attendance for each day of the month -->
+                                    <t t-foreach="range(1, end_day + 1)" t-as="day_number">
+                                        <td
+                                            style="border: 1px solid black; text-align:center; vertical-align:middle; font-size: 8px; padding: 0px;">
+                                            <t t-set="day_value"
+                                                t-value="line['day_' + str(day_number)]" />
+                                            <t t-if="day_value">
+                                                <t t-esc="dict(line._get_day_selections()).get(day_value)"/>
+                                            </t>
+                                            <t t-else="">
+                                                <!-- Empty cell for days with no status -->
+                                            </t>
+                                        </td>
+                                    </t>
+                                    <td style="border: 1px solid black; text-align: center;font-size: 10px;">
+                                        <t t-esc="line.over_time"/>
+                                    </td>
+                                    <td style="border: 1px solid black; text-align: center;font-size: 10px;">
+                                        <t t-esc="line.trip_allowance"/>
+                                    </td>
+                                    <td style="border: 1px solid black; text-align: center;font-size: 10px;">
+                                        <t t-esc="line.other_deduction"/>
+                                    </td>
+                                    <td style="border: 1px solid black; text-align: center;font-size: 10px;">
+                                        <t t-esc="line.over_time_sar"/>
+                                    </td>
+                                    <td style="border: 1px solid black; text-align: center;font-size: 10px;">
+                                        <t t-esc="line.other_allowances"/>
+                                    </td>
+                                    <td style="border: 1px solid black; text-align: center;font-size: 10px;">
+                                        <t t-esc="line.miscellaneous"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div style="border: 1px solid black;  margin-bottom: 15px; padding: 10px;">
+                            <thead style="background-color: #f0f0f0;">
+                                <strong style="text-align: left; border-bottom: none; width: 100px;">
+                                    Comments:</strong>
+                                <td>
+                                    <t t-esc="doc.comments or ''" />
+                                </td>
+                            </thead>
+                        </div>
+                        <t t-set="states_list" t-value="list(dict(doc._fields['state'].selection).keys())"/>
+                        <table class="table table-bordered"
+                            style="border: 1px solid black; width: 100%; border-collapse: collapse;">
+                            <thead style="background-color: #f0f0f0; ">
+                                <tr style="border-bottom: none;">
+                                    <th style="text-align: center; width: 100px;">Prepared and
+                                        verified BY Project Controller</th>
+                                    <th style="text-align: center; width: 100px;">Client</th>
+                                    <th style="text-align: center; width: 100px;">Oprational Manager</th>
+                                    <th style="text-align: center; width: 100px;">Division Head</th>
+                                    <th style="text-align: center; width: 100px;">Verified by MRM</th>
+                                    <th style="text-align: center; width: 100px;">Verified by HR</th>
+                                    <th style="text-align: center; width: 100px;">Verified by Auditor</th>
+                                    <th style="text-align: center; width: 100px;">Verified by Finance</th>
+                                    <th style="text-align: center; width: 100px;">Approved by COO</th>
+                                </tr>
+                                <tr class="spec_table" style="background-color: #f0f0f0;  border-top: none;">
+                                    <td style="text-align: center; width: 100px; height: 50px; bottom: 500px;">
+                                        <t t-esc="doc.project_id.project_controler_id.name or ''" />
+                                        <br />
+                                        <t t-if="states_list.index(doc.state) > 0">
+                                            <span style="font-size: 40px; color: green;">&#10003;</span>
+                                        </t>
+                                    </td>
+                                    <td style="text-align: center; width: 100px; height: 50px;">
+                                        <t t-esc="doc.project_id.client_id.name or ''" />
+                                        <br />
+                                        <t t-if="states_list.index(doc.state) > 1">
+                                            <span style="font-size: 40px; color: green;">&#10003;</span>
+                                        </t>
+                                    </td>
+                                    <td style="text-align: center; width: 100px; height: 50px;">
+                                        <t t-esc="doc.project_id.operation_manager_id.name or ''" />
+                                        <br />
+                                        <t t-if="states_list.index(doc.state) > 2">
+                                            <span style="font-size: 40px; color: green;">&#10003;</span>
+                                        </t>
+                                    </td>
+                                    <td style="text-align: center; width: 100px; height: 50px;">
+                                        <t t-esc="doc.project_id.division_head_id.name or ''" />
+                                        <br />
+                                        <t t-if="states_list.index(doc.state) > 3">
+                                            <span style="font-size: 40px; color: green;">&#10003;</span>
+                                        </t>
+                                    </td>
+                                    <td style="text-align: center; width: 100px; height: 50px;">
+                                        <t t-esc="doc.project_id.mrm_id.name or ''" />
+                                        <br />
+                                        <t t-if="states_list.index(doc.state) > 4">
+                                            <span style="font-size: 40px; color: green;">&#10003;</span>
+                                        </t>
+                                    </td>
+                                    <td style="text-align: center; width: 100px; height: 50px;">
+                                        <t t-esc="doc.project_id.hr_id.name or ''" />
+                                        <br />
+                                        <t t-if="states_list.index(doc.state) > 5">
+                                            <span style="font-size: 40px; color: green;">&#10003;</span>
+                                        </t>
+                                    </td>
+                                    <td style="text-align: center; width: 100px; height: 50px;">
+                                        <t t-esc="doc.project_id.auditor_id.name or ''" />
+                                        <br />
+                                        <t t-if="states_list.index(doc.state) > 6">
+                                            <span style="font-size: 40px; color: green;">&#10003;</span>
+                                        </t>
+                                    </td>
+                                    <td style="text-align: center; width: 100px; height: 50px;">
+                                        <t t-esc="doc.project_id.finance_id.name or ''" />
+                                        <br />
+                                        <t t-if="states_list.index(doc.state) > 7">
+                                            <span style="font-size: 40px; color: green;">&#10003;</span>
+                                        </t>
+                                    </td>
+                                    <td style="text-align: center; width: 100px; height: 50px;">
+                                        <t t-esc="doc.project_id.coo_id.name or ''" />
+                                        <br />
+                                        <t t-if="states_list.index(doc.state) > 8">
+                                            <span style="font-size: 40px; color: green;">&#10003;</span>
+                                        </t>
+                                    </td>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="employee_history_paper_format" model="report.paperformat">
+        <field name="name">Employee history Reports</field>
+        <field name="default" eval="False" />
+        <field name="format">custom</field>
+        <field name="page_height">400</field>
+        <field name="page_width">300</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">30</field>
+        <field name="margin_bottom">23</field>
+        <field name="margin_left">5</field>
+        <field name="margin_right">5</field>
+        <field name="header_line" eval="False" />
+        <field name="header_spacing">20</field>
+        <field name="dpi">90</field>
+        <field name="disable_shrinking" eval="True" />
+    </record>
+
+    <record id="employee_timesheet_report_action" model="ir.actions.report">
+        <field name="name">Employee Timesheet Report</field>
+        <field name="model">employee.timesheet</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="paperformat_id" ref="employee_project_history.employee_history_paper_format" />
+        <field name="report_name">employee_project_history.report_employee_timesheet</field>
+        <field name="report_file">employee_project_history.report_employee_timesheet</field>
+        <field name="print_report_name">'Timesheet for Project %s (%s-%s)' %(object.project_id.name, object.start_date, object.end_date)</field>
+        <field name="binding_model_id" ref="model_employee_timesheet" />
+        <field name="binding_type">report</field>
+    </record>
+
+</odoo>            

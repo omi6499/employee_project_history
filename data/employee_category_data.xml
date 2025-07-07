@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="employee_category_revenue" model="employee.category">
+            <field name="name">Revenue</field>
+        </record>
+
+        <record id="employee_category_nonrevenue" model="employee.category">
+            <field name="name">Non Revenue</field>
+        </record>
+
+        <record id="employee_category_telemarketing" model="employee.category">
+            <field name="name">Tele Marketing</field>
+        </record>
+    </data>
+</odoo>
