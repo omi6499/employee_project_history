@@ -14,3 +14,4 @@ access_vaction_history,access.vaction.history,model_vaction_history,base.group_u
 access_employee_category_report_wizard,access.employee.category.report.wizard,model_employee_category_report_wizard,base.group_user,1,1,1,1
 access_employee_category,access.employee.category,model_employee_category,base.group_user,1,0,0,0
 access_employee_category_admin,access.employee.category.admin,model_employee_category,base.group_system,1,1,1,1
+access_employee_service_completion_wizard,access.employee.service.completion.wizard,model_employee_service_completion_wizard,base.group_user,1,0,0,0
