@@ -1,0 +1,37 @@
+<odoo>
+    <record id="view_employee_service_completion_wizard" model="ir.ui.view">
+        <field name="name">employee.service.completion.wizard.form</field>
+        <field name="model">employee.service.completion.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Service Completion Report">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="month" placeholder="Select Month"/>
+                        </group>
+                        <group>
+                            <field name="year" placeholder="Select Year"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="action_generate_report" type="object" string="Generate Report" class="btn btn-primary"/>
+                        <button string="Cancel" class="btn btn-secondary" special="cancel"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_employee_service_completion_wizard" model="ir.actions.act_window">
+        <field name="name">Service Completion Report</field>
+        <field name="res_model">employee.service.completion.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_employee_service_completion_wizard"
+              name="Service Completion"
+              parent="menu_employee_report_wizard"
+              action="action_employee_service_completion_wizard"
+              sequence="30"/>
+</odoo>

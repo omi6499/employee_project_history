@@ -21,7 +21,8 @@
         'views/hr_payslip_inherit_views.xml',
         'wizard/update_project.xml',
         'wizard/hr_payslip_draft_wizard_views.xml',
-        'wizard/employee_category_report_wizard_views.xml'
+        'wizard/employee_category_report_wizard_views.xml',
+        'wizard/employee_service_completion_wizard_views.xml'
     ],
     'assets': {
         'web.assets_backend': [

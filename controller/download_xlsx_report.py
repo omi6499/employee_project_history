@@ -1,10 +1,9 @@
 from odoo import http
 from odoo.http import request
-import base64
 import xlsxwriter
 from io import BytesIO
 from dateutil.relativedelta import relativedelta
-from datetime import datetime, date
+from datetime import datetime
 
 class ReportDownloadController(http.Controller):
 
@@ -317,3 +316,48 @@ class ReportDownloadController(http.Controller):
 
 
 
+
+    @http.route('/web/download/service_completion_report', type='http', auth='user')
+    def download_service_completion_report(self, wiz_id, **kwargs):
+        wizard = request.env['employee.service.completion.wizard'].sudo().browse(int(wiz_id))
+        month_label = dict(wizard._fields['month'].selection).get(wizard.month, '')
+        generated_file, file_name = self.generate_service_completion_report(wizard.month, month_label, wizard.year)
+        return request.make_response(
+            generated_file,
+            headers=[
+                ('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'),
+                ('Content-Disposition', f'attachment; filename="{file_name}"'),
+            ]
+        )
+
+    def generate_service_completion_report(self, month, month_label, year):
+        output = BytesIO()
+        workbook = xlsxwriter.Workbook(output, {'in_memory': True})
+        worksheet = workbook.add_worksheet('Completion')
+        header_format = workbook.add_format({'bold': True, 'align': 'center'})
+        data_format = workbook.add_format({'align': 'left'})
+
+        headers = ['Employee', 'Attendance %', 'Complete']
+        for col, header in enumerate(headers):
+            worksheet.write(0, col, header, header_format)
+
+        date_from = datetime(int(year), int(month), 1)
+        date_to = (date_from + relativedelta(months=1)) - relativedelta(days=1)
+
+        lines = request.env['employee.timesheet.line'].search([
+            ('employee_timesheet_id.start_date', '>=', date_from.date()),
+            ('employee_timesheet_id.end_date', '<=', date_to.date()),
+        ])
+
+        row = 1
+        for line in lines:
+            worksheet.write(row, 0, line.employee_id.name or '', data_format)
+            worksheet.write(row, 1, round(line.attendance_percentage, 2), data_format)
+            worksheet.write(row, 2, 'Yes' if line.attendance_percentage >= 100 else 'No', data_format)
+            row += 1
+
+        workbook.close()
+        output.seek(0)
+        generated_file = output.read()
+        file_name = f'Service_Completion_{month_label}_{year}.xlsx'
+        return generated_file, file_name
